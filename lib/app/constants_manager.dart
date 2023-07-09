@@ -24,6 +24,7 @@ class Endpoints {
 
   //home service screen
   static const String categories = '/api/services/categories/';
+  static const String recentSearches = '/api/services/';
 }
 
 void printTest(String text) {

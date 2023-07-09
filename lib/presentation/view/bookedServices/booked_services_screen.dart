@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:handy_home_app/presentation/resources/color_manager.dart';
 import 'package:handy_home_app/presentation/resources/style_manager.dart';
 import 'package:handy_home_app/presentation/view/bookedServices/active_order_screen..dart';
 import 'package:handy_home_app/presentation/view/bookedServices/all_order_screen.dart';

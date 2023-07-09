@@ -12,7 +12,6 @@ import 'package:handy_home_app/customwidget/sizedbox_custom.dart';
 import 'package:handy_home_app/customwidget/snackbar.dart';
 import 'package:handy_home_app/presentation/resources/color_manager.dart';
 import '../../../bussiness logic/authCubit/auth_state.dart';
-import '../../../data/network/local/local_network.dart';
 import '../../resources/validation_manager.dart';
 import '../../../app/l10n/locale_keys.g.dart';
 import '../../../customwidget/button_custom.dart';

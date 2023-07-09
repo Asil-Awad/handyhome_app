@@ -4,10 +4,8 @@ import 'package:handy_home_app/app/routes/route_constants.dart';
 import 'package:handy_home_app/presentation/resources/color_manager.dart';
 import 'package:handy_home_app/presentation/resources/style_manager.dart';
 import 'package:handy_home_app/presentation/view/home/HomeComponents/home_horizontal_category_widget.dart';
-import 'package:handy_home_app/presentation/view/home/HomeComponents/stare_rating_widget.dart';
-
 import '../../../customwidget/search_custom_widget.dart';
-import '../../resources/assets_manager.dart';
+
 
 class CategoryScreen extends StatelessWidget {
   const CategoryScreen({Key? key}) : super(key: key);

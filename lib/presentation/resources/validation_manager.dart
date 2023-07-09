@@ -12,7 +12,7 @@ extension ValidationExt on String {
 
   String? get isNotEmptyField {
     String? result;
-    if (this==null|| isEmpty) {
+    if (isEmpty) {
       result = 'هذا الحقل مطلوب';
     }
     return result;
