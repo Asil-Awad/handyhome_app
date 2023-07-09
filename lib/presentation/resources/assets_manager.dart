@@ -40,4 +40,5 @@ class IconPath {
   static const String dollarIcon = '${baseIconUrl}dollar_icon.svg';
   static const String logoutIcon = '${baseIconUrl}logout_icon.svg';
   static const String mobilePrefixIcon = '${baseIconUrl}mobile_prefix_icon.svg';
+  static const String loadingIcon = '${baseIconUrl}loading_icon.svg';
 }

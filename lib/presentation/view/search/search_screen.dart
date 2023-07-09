@@ -3,9 +3,20 @@ import 'package:handy_home_app/presentation/view/home/HomeComponents/home_horizo
 
 import '../../../customwidget/search_custom_widget.dart';
 import '../../resources/style_manager.dart';
+import '../home/HomeComponents/single_service_widget.dart';
 
-class SearchScreen extends StatelessWidget {
+class SearchScreen extends StatefulWidget {
   const SearchScreen({Key? key}) : super(key: key);
+
+  @override
+  State<SearchScreen> createState() => _SearchScreenState();
+}
+
+class _SearchScreenState extends State<SearchScreen> {
+  @override
+  void initState() {
+    super.initState();
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -47,6 +58,10 @@ class SearchScreen extends StatelessWidget {
                   physics: const BouncingScrollPhysics(),
                   itemBuilder: (context, index) => const SingleServiceWidget(
                     width: 160,
+                    image:
+                        "https://mohammedashrafdagga.pythonanywhere.com/media/services_images/services.png",
+                    price: '30-50',
+                    serviceName: "تركيب مفاصل للأبواب",
                   ),
                   itemCount: 30,
                   scrollDirection: Axis.horizontal,
@@ -65,6 +80,10 @@ class SearchScreen extends StatelessWidget {
                   physics: const BouncingScrollPhysics(),
                   itemBuilder: (context, index) => const SingleServiceWidget(
                     width: 160,
+                    image:
+                        "https://mohammedashrafdagga.pythonanywhere.com/media/services_images/services.png",
+                    price: '30-50',
+                    serviceName: "تركيب مفاصل للأبواب",
                   ),
                   itemCount: 30,
                   scrollDirection: Axis.horizontal,
@@ -83,13 +102,17 @@ class SearchScreen extends StatelessWidget {
                   physics: const BouncingScrollPhysics(),
                   itemBuilder: (context, index) => const SingleServiceWidget(
                     width: 160,
+                    image:
+                        "https://mohammedashrafdagga.pythonanywhere.com/media/services_images/services.png",
+                    price: '30-50',
+                    serviceName: "تركيب مفاصل للأبواب",
                   ),
                   itemCount: 30,
                   scrollDirection: Axis.horizontal,
                 ),
               )
             ],
-          ))
+          )),
         ],
       ),
     );

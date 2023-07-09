@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:handy_home_app/app/routes/route_constants.dart';
 import 'package:handy_home_app/bussiness%20logic/authCubit/auth_cubit.dart';
+import 'package:handy_home_app/bussiness%20logic/homeCubit/home_cubit.dart';
 import 'package:handy_home_app/presentation/view/authentication/email_opt_screen.dart';
 import 'package:handy_home_app/presentation/view/authentication/emailconfirmation_view.dart';
 import 'package:handy_home_app/presentation/view/authentication/emailverification_view.dart';
@@ -68,9 +69,19 @@ class RouteGenerator {
       case RouteConstants.emailConfirmationRoute:
         return MaterialPageRoute(builder: (_) => const EmailConfirmationView());
       case RouteConstants.categoryRoute:
-        return MaterialPageRoute(builder: (_) => const CategoryScreen());
+        return MaterialPageRoute(
+            builder: (_) => BlocProvider(
+                  create: (context) => HomeCubit(),
+                  child: CategoryScreen(categoryId: settings.arguments as int),
+                ));
       case RouteConstants.serviceDetailsRoute:
-        return MaterialPageRoute(builder: (_) => const ServiceDetailsScreen());
+        return MaterialPageRoute(
+            builder: (_) => BlocProvider(
+                  create: (context) => HomeCubit(),
+                  child: ServiceDetailsScreen(
+                    serviceId: settings.arguments as int,
+                  ),
+                ));
       case RouteConstants.serviceInfoRoute:
         return MaterialPageRoute(
             builder: (_) => ServiceInfoScreen(
@@ -85,7 +96,9 @@ class RouteGenerator {
         return MaterialPageRoute(
             builder: (_) => BlocProvider<AuthCubit>(
                   create: (context) => AuthCubit(),
-                  child:  EmailOtpScreen(email: settings.arguments as String,),
+                  child: EmailOtpScreen(
+                    email: settings.arguments as String,
+                  ),
                 ));
 
       case RouteConstants.becomeServiceProviderInfoScreen:

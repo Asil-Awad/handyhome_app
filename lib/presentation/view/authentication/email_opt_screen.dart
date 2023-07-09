@@ -42,138 +42,143 @@ class _EmailOtpScreenState extends State<EmailOtpScreen> {
     return Scaffold(
       body: Padding(
         padding: const EdgeInsets.symmetric(horizontal: 30),
-        child: Column(
-          mainAxisAlignment: MainAxisAlignment.center,
-          crossAxisAlignment: CrossAxisAlignment.center,
-          children: [
-            Image.asset(ImagePath.codeVerificationImage),
-            const SizedBox(
-              height: 16,
-            ),
-            Text(
-              'توثيق الحساب',
-              style: StyleManger.headline1(
-                fontSize: 26,
+        child: SingleChildScrollView(
+          child: Column(
+            mainAxisAlignment: MainAxisAlignment.center,
+            crossAxisAlignment: CrossAxisAlignment.center,
+            children: [
+              Image.asset(ImagePath.codeVerificationImage),
+              const SizedBox(
+                height: 16,
               ),
-            ),
-            const SizedBox(
-              height: 16,
-            ),
-            const Text(
-              'لقد قمنا بارسال كود تفعيل الى بريدك الالكتروني٬ يرجى ادخال الكود المرسل',
-              textAlign: TextAlign.center,
-            ),
-            const SizedBox(
-              height: 16,
-            ),
-            Form(
-              key: formKey,
-              child: Pinput(
-                controller: pinController,
-                validator: (value) => value!.isValidOtp,
-                keyboardType: const TextInputType.numberWithOptions(
-                    signed: false, decimal: false),
-                autofillHints: const [AutofillHints.oneTimeCode],
-                errorPinTheme: PinTheme(
+              Text(
+                'توثيق الحساب',
+                style: StyleManger.headline1(
+                  fontSize: 26,
+                ),
+              ),
+              const SizedBox(
+                height: 16,
+              ),
+              const Text(
+                'لقد قمنا بارسال كود تفعيل الى بريدك الالكتروني٬ يرجى ادخال الكود المرسل',
+                textAlign: TextAlign.center,
+              ),
+              const SizedBox(
+                height: 16,
+              ),
+              Form(
+                key: formKey,
+                child: Pinput(
+                  controller: pinController,
+                  validator: (value) => value!.isValidOtp,
+                  keyboardType: const TextInputType.numberWithOptions(
+                      signed: false, decimal: false),
+                  autofillHints: const [AutofillHints.oneTimeCode],
+                  errorPinTheme: PinTheme(
+                      height: 55,
+                      width: 80,
+                      decoration: BoxDecoration(
+                          borderRadius: BorderRadius.circular(8),
+                          border:
+                              Border.all(color: ColorManager.redDarkColor))),
+                  focusedPinTheme: PinTheme(
+                      height: 55,
+                      width: 80,
+                      decoration: BoxDecoration(
+                          borderRadius: BorderRadius.circular(8),
+                          border: Border.all(
+                              color: ColorManager.primaryMainEnableColor))),
+                  length: 5,
+                  toolbarEnabled: false,
+                  defaultPinTheme: PinTheme(
                     height: 55,
                     width: 80,
                     decoration: BoxDecoration(
-                        borderRadius: BorderRadius.circular(8),
-                        border: Border.all(color: ColorManager.redDarkColor))),
-                focusedPinTheme: PinTheme(
-                    height: 55,
-                    width: 80,
-                    decoration: BoxDecoration(
-                        borderRadius: BorderRadius.circular(8),
-                        border: Border.all(
-                            color: ColorManager.primaryMainEnableColor))),
-                length: 5,
-                toolbarEnabled: false,
-                defaultPinTheme: PinTheme(
-                  height: 55,
-                  width: 80,
-                  decoration: BoxDecoration(
-                    color: Colors.white,
-                    borderRadius: BorderRadius.circular(8),
+                      color: Colors.white,
+                      borderRadius: BorderRadius.circular(8),
+                    ),
                   ),
                 ),
               ),
-            ),
-            const SizedBox(
-              height: 16,
-            ),
-            BlocListener<AuthCubit, AuthState>(
-              listener: (context, state) {
-                if (state is VerifyCodeState &&
-                    state.verifyCodeStatus == VerifyCodeStatus.verifySuccess) {
-                  showSnackBar(context,
-                      text: state.message ?? '',
-                      backgroundColor: Colors.green,
-                      textColor: Colors.white);
-                  NavigationManager.goToAndRemove(RouteConstants.loginRoute);
-                } else if (state is VerifyCodeState &&
-                    state.verifyCodeStatus == VerifyCodeStatus.verifyFailed) {
-                  NavigationManager.pop();
-                  showSnackBar(context,
-                      text: state.message ?? '',
-                      backgroundColor: Colors.grey,
-                      textColor: Colors.black);
-                } else if (state is VerifyCodeState &&
-                    state.verifyCodeStatus == VerifyCodeStatus.verifyLoading) {
-                  showLoading(context);
-                }
-              },
-              child: ElevatedButton(
-                onPressed: () {
-                  if (formKey.currentState!.validate()) {
-                    context
-                        .read<AuthCubit>()
-                        .verifyCode(code: pinController.text);
+              const SizedBox(
+                height: 16,
+              ),
+              BlocListener<AuthCubit, AuthState>(
+                listener: (context, state) {
+                  if (state is VerifyCodeState &&
+                      state.verifyCodeStatus ==
+                          VerifyCodeStatus.verifySuccess) {
+                    showSnackBar(context,
+                        text: state.message ?? '',
+                        backgroundColor: Colors.green,
+                        textColor: Colors.white);
+                    NavigationManager.goToAndRemove(RouteConstants.loginRoute);
+                  } else if (state is VerifyCodeState &&
+                      state.verifyCodeStatus == VerifyCodeStatus.verifyFailed) {
+                    NavigationManager.pop();
+                    showSnackBar(context,
+                        text: state.message ?? '',
+                        backgroundColor: Colors.grey,
+                        textColor: Colors.black);
+                  } else if (state is VerifyCodeState &&
+                      state.verifyCodeStatus ==
+                          VerifyCodeStatus.verifyLoading) {
+                    showLoading(context);
                   }
                 },
-                child: const Text(
-                  'تأكيد',
-                  style: TextStyle(
-                    fontSize: 15,
-                  ),
-                ),
-                style: ElevatedButton.styleFrom(
-                    minimumSize: const Size(double.infinity, 54)),
-              ),
-            ),
-            const SizedBox(
-              height: 16,
-            ),
-            BlocListener<AuthCubit, AuthState>(
-              listener: (context, state) {
-                if (state is ResendCodeState &&
-                    state.resendCodeStatus == ResendCodeStatus.success) {
-                  NavigationManager.pop();
-                  showSnackBar(context,
-                      text: state.message ?? '',
-                      backgroundColor: Colors.green,
-                      textColor: Colors.white);
-                } else if (state is ResendCodeState &&
-                    state.resendCodeStatus == ResendCodeStatus.failed) {
-                  NavigationManager.pop();
-                  showSnackBar(context,
-                      text: state.message ?? '',
-                      backgroundColor: Colors.grey,
-                      textColor: Colors.black);
-                } else if (state is ResendCodeState &&
-                    state.resendCodeStatus == ResendCodeStatus.loading) {
-                  showLoading(context);
-                }
-              },
-              child: RichTextCustom(
-                  text1: 'لم تستلم بريد التفعيل؟ ',
-                  text2: 'اضغط هنا',
-                  color: ColorManager.brownColor,
+                child: ElevatedButton(
                   onPressed: () {
-                    context.read<AuthCubit>().resendCode(email: widget.email);
-                  }),
-            ),
-          ],
+                    if (formKey.currentState!.validate()) {
+                      context
+                          .read<AuthCubit>()
+                          .verifyCode(code: pinController.text);
+                    }
+                  },
+                  child: const Text(
+                    'تأكيد',
+                    style: TextStyle(
+                      fontSize: 15,
+                    ),
+                  ),
+                  style: ElevatedButton.styleFrom(
+                      minimumSize: const Size(double.infinity, 54)),
+                ),
+              ),
+              const SizedBox(
+                height: 16,
+              ),
+              BlocListener<AuthCubit, AuthState>(
+                listener: (context, state) {
+                  if (state is ResendCodeState &&
+                      state.resendCodeStatus == ResendCodeStatus.success) {
+                    NavigationManager.pop();
+                    showSnackBar(context,
+                        text: state.message ?? '',
+                        backgroundColor: Colors.green,
+                        textColor: Colors.white);
+                  } else if (state is ResendCodeState &&
+                      state.resendCodeStatus == ResendCodeStatus.failed) {
+                    NavigationManager.pop();
+                    showSnackBar(context,
+                        text: state.message ?? '',
+                        backgroundColor: Colors.grey,
+                        textColor: Colors.black);
+                  } else if (state is ResendCodeState &&
+                      state.resendCodeStatus == ResendCodeStatus.loading) {
+                    showLoading(context);
+                  }
+                },
+                child: RichTextCustom(
+                    text1: 'لم تستلم بريد التفعيل؟ ',
+                    text2: 'اضغط هنا',
+                    color: ColorManager.brownColor,
+                    onPressed: () {
+                      context.read<AuthCubit>().resendCode(email: widget.email);
+                    }),
+              ),
+            ],
+          ),
         ),
       ),
     );

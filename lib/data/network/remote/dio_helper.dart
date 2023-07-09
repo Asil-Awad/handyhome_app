@@ -95,6 +95,7 @@ class DioHelper {
     };
     try {
       var response = await dio.get(endPoint, queryParameters: queryParameters);
+      print(response.data);
       if (response.statusCode == 400) {
         return ApiFailure(response.data, statusCode: 400);
       }

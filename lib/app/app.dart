@@ -25,10 +25,10 @@ class MyApp extends StatelessWidget {
         child: MaterialApp(
           theme: getApplicationTheme(),
           debugShowCheckedModeBanner: false,
-          // initialRoute: RouteConstants.loginRoute,
-          initialRoute: getIt<SharedPrefController>().getLoggedIn()
-              ? RouteConstants.homeRoute
-              : RouteConstants.loginRoute,
+          // initialRoute: RouteConstants.onBoardingRoute,
+            initialRoute: getIt<SharedPrefController>().getLoggedIn()
+                ? RouteConstants.homeRoute
+                : RouteConstants.loginRoute,
           onGenerateRoute: RouteGenerator.generateRoutes,
           localizationsDelegates: context.localizationDelegates,
           supportedLocales: context.supportedLocales,

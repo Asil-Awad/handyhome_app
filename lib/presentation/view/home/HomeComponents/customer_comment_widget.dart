@@ -1,48 +1,53 @@
 import 'package:flutter/material.dart';
 import 'package:handy_home_app/presentation/view/home/HomeComponents/stare_rating_widget.dart';
 
-import '../../../resources/assets_manager.dart';
 import '../../../resources/style_manager.dart';
+
 class CustomerCommentWidget extends StatelessWidget {
   const CustomerCommentWidget({
     Key? key,
+    required this.name,
+    required this.image,
+    required this.comment,
+    required this.rating,
   }) : super(key: key);
-
+  final String name;
+  final String image;
+  final String comment;
+  final int rating;
   @override
   Widget build(BuildContext context) {
     return Column(
+      crossAxisAlignment: CrossAxisAlignment.start,
       children: [
         Row(
           children: [
             Container(
               height: 50,
               width: 50,
-              margin: EdgeInsets.only(left: 8),
+              margin: const EdgeInsets.only(left: 8),
               decoration: BoxDecoration(
                 borderRadius: BorderRadius.circular(8),
               ),
-              child: Image.asset(
-                ImagePath.profileImage,
-                fit: BoxFit.fill,
+              child: Image.network(
+                'https://png.pngtree.com/png-vector/20191101/ourmid/pngtree-cartoon-color-simple-male-avatar-png-image_1934459.jpg',
+                fit: BoxFit.contain,
               ),
               clipBehavior: Clip.antiAlias,
             ),
             Text(
-              'أحمد العزايزة',
-              style: StyleManger.headline1(fontSize: 12),
+              name.length < 3 ? 'اسم افتراضي' : name,
+              style: StyleManger.headline1(fontSize: 14),
             ),
             const Spacer(),
-            const StareRatingWidget(ratingNumber: '4.6')
+            StareRatingWidget(ratingNumber: rating.toString())
           ],
         ),
-        SizedBox(
-          height: 5,
-        ),
         Text(
-          'هذا النص هو مثال لنص يمكن أن يستبدل في نفس المساحة، لقد تم توليد هذا النص من مولد النص العربى، حيث يمكنك أن تولد.',
+          comment,
           style: StyleManger.headline2(),
         ),
-        SizedBox(
+        const SizedBox(
           height: 10,
         ),
       ],

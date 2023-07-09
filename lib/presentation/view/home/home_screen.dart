@@ -1,9 +1,11 @@
+import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:handy_home_app/app/routes/navigation_manager.dart';
 import 'package:handy_home_app/app/routes/route_constants.dart';
 import 'package:handy_home_app/presentation/resources/assets_manager.dart';
 import 'package:handy_home_app/presentation/resources/style_manager.dart';
+import 'package:handy_home_app/presentation/view/home/category_screen.dart';
 import 'package:skeletons/skeletons.dart';
 
 import '../../../bussiness logic/homeCubit/home_cubit.dart';
@@ -20,8 +22,9 @@ class HomeScreen extends StatefulWidget {
 class _HomeScreenState extends State<HomeScreen> {
   @override
   void initState() {
-    context.read<HomeCubit>().categories();
     super.initState();
+    context.read<HomeCubit>().categories();
+    context.read<LatestServiceCubit>().latestAddedService();
   }
 
   @override
@@ -44,6 +47,7 @@ class _HomeScreenState extends State<HomeScreen> {
             ),
             BlocBuilder<HomeCubit, HomeState>(
               builder: (context, state) {
+                print(state);
                 return GridView.builder(
                     padding: const EdgeInsets.only(top: 21),
                     shrinkWrap: true,
@@ -63,12 +67,12 @@ class _HomeScreenState extends State<HomeScreen> {
                               borderRadius: BorderRadius.circular(8)),
                           margin: const EdgeInsets.all(5),
                         ));
-                      }
-                      if (state is CategorySuccessState) {
+                      } else if (state is CategorySuccessState) {
                         return InkWell(
                           onTap: () {
                             NavigationManager.pushNamed(
-                                RouteConstants.categoryRoute);
+                                RouteConstants.categoryRoute,
+                                arguments: index + 1);
                           },
                           child: Card(
                             elevation: 0,
@@ -78,7 +82,13 @@ class _HomeScreenState extends State<HomeScreen> {
                             child: Column(
                               mainAxisAlignment: MainAxisAlignment.center,
                               children: [
-                                Image.network(state.categories[index].icon),
+                                CachedNetworkImage(
+                                  imageUrl: state.categories[index].icon,
+                                  placeholder: (context, url) =>
+                                      const CircularProgressIndicator(),
+                                  errorWidget: (context, url, error) =>
+                                      const Icon(Icons.error),
+                                ),
                                 Text(
                                   state.categories[index].name,
                                   style: StyleManger.headline1(fontSize: 14),
@@ -90,7 +100,7 @@ class _HomeScreenState extends State<HomeScreen> {
                           ),
                         );
                       }
-                      return Image.asset(ImagePath.cleaningImage);
+                      return const CircularLoadingWidget();
                     });
               },
             ),
@@ -132,7 +142,9 @@ class _HomeScreenState extends State<HomeScreen> {
           title: 'الأكثر طلباً',
           onPressed: () {},
         ),
-        const HomeHorizontalCategoryWidget(),
+        const HomeHorizontalCategoryWidget(
+          changeTheOrder: true,
+        ),
         const SizedBox(
           height: 10,
         ),
@@ -140,7 +152,9 @@ class _HomeScreenState extends State<HomeScreen> {
           title: 'المضافة حديثاً',
           onPressed: () {},
         ),
-        const HomeHorizontalCategoryWidget(),
+        const HomeHorizontalCategoryWidget(
+          changeTheOrder: false,
+        )
       ],
     );
   }

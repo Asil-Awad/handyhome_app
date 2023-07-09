@@ -1,47 +1,99 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:handy_home_app/app/routes/navigation_manager.dart';
 import 'package:handy_home_app/app/routes/route_constants.dart';
 import 'package:handy_home_app/presentation/resources/color_manager.dart';
 import 'package:handy_home_app/presentation/resources/style_manager.dart';
 import 'package:handy_home_app/presentation/view/home/HomeComponents/home_horizontal_category_widget.dart';
 import '../../../customwidget/search_custom_widget.dart';
+import '../../../bussiness logic/homeCubit/home_cubit.dart';
+import '../../../customwidget/search_custom_widget.dart';
+import 'HomeComponents/single_service_widget.dart';
 
+class CategoryScreen extends StatefulWidget {
+  const CategoryScreen({required this.categoryId, Key? key}) : super(key: key);
+  final int categoryId;
 
-class CategoryScreen extends StatelessWidget {
-  const CategoryScreen({Key? key}) : super(key: key);
+  @override
+  State<CategoryScreen> createState() => _CategoryScreenState();
+}
+
+class _CategoryScreenState extends State<CategoryScreen> {
+  @override
+  void initState() {
+    super.initState();
+    context.read<HomeCubit>().categoryServices(id: widget.categoryId);
+  }
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       body: Padding(
         padding: const EdgeInsets.only(top: 18, left: 30, right: 30),
-        child: Column(
-          children: [
-            const CustomHeaderWidget(title: 'خدمات السباكة'),
-            const SizedBox(
-              height: 16,
-            ),
-            const SearchCustomWidget(),
-            Expanded(
-              child: ListView.builder(
-                physics: const BouncingScrollPhysics(),
-                itemCount: 30,
-                padding: const EdgeInsets.only(top: 10),
-                itemBuilder: (context, index) => InkWell(
-                  onTap: () {
-                    NavigationManager.pushNamed(
-                        RouteConstants.serviceDetailsRoute);
-                  },
-                  child: const SingleServiceWidget(
-                    width: double.infinity,
+        child: BlocBuilder<HomeCubit, HomeState>(
+          builder: (context, state) {
+            if (state is CategoryServicesLoadingState) {
+              return const CircularLoadingWidget();
+            } else if (state is CategoryServicesSuccessState) {
+              return Column(
+                children: [
+                  CustomHeaderWidget(
+                      title: 'خدمات ${state.categoryServices.name}'),
+                  const SizedBox(
+                    height: 16,
                   ),
-                ),
-              ),
-            )
-          ],
+                  const SearchCustomWidget(),
+                  Expanded(
+                    child: ListView.builder(
+                      physics: const BouncingScrollPhysics(),
+                      itemCount: state.categoryServices.services.length,
+                      padding: const EdgeInsets.only(top: 10),
+                      itemBuilder: (context, index) {
+                        return InkWell(
+                          onTap: () {
+                            NavigationManager.pushNamed(
+                                RouteConstants.serviceDetailsRoute,
+                                arguments: index + 1);
+                          },
+                          child: SingleServiceWidget(
+                            width: double.infinity,
+                            image: state.categoryServices.services[index].image,
+                            price:
+                                '${state.categoryServices.services[index].priceFrom} - ${state.categoryServices.services[index].priceTo}',
+                            serviceName:
+                                state.categoryServices.services[index].name,
+                            loadingPlaceholder: Container(
+                              height: 180,
+                              padding: const EdgeInsets.symmetric(
+                                  horizontal: 8, vertical: 8),
+                              color: Colors.grey,
+                            ),
+                          ),
+                        );
+                      },
+                    ),
+                  )
+                ],
+              );
+            }
+            return const Icon(Icons.error);
+          },
         ),
       ),
     );
+  }
+}
+
+class CircularLoadingWidget extends StatelessWidget {
+  const CircularLoadingWidget({
+    Key? key,
+  }) : super(key: key);
+
+  @override
+  Widget build(BuildContext context) {
+    return const Center(
+        child: SizedBox(
+            height: 50, width: 50, child: CircularProgressIndicator()));
   }
 }
 

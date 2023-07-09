@@ -57,8 +57,11 @@ List<Widget> tabs = [
   MultiBlocProvider(
     providers: [
       BlocProvider(
+        create: (context) => LatestServiceCubit(),
+      ),
+      BlocProvider(
         create: (context) => HomeCubit(),
-      )
+      ),
     ],
     child: const HomeScreen(),
   ),

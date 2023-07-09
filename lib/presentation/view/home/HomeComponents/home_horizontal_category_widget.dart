@@ -1,92 +1,71 @@
 import 'package:flutter/material.dart';
-import 'package:handy_home_app/presentation/view/home/HomeComponents/stare_rating_widget.dart';
-
-import '../../../resources/assets_manager.dart';
-import '../../../resources/style_manager.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:handy_home_app/bussiness%20logic/homeCubit/home_cubit.dart';
+import 'package:handy_home_app/data/models/service_model.dart';
+import 'package:handy_home_app/presentation/view/home/HomeComponents/single_service_widget.dart';
+import 'package:skeletons/skeletons.dart';
 
 class HomeHorizontalCategoryWidget extends StatelessWidget {
   const HomeHorizontalCategoryWidget({
+    this.changeTheOrder = false,
     Key? key,
   }) : super(key: key);
-
+  final bool changeTheOrder;
   @override
   Widget build(BuildContext context) {
-    return SizedBox(
-      height: 250,
-      child: ListView.builder(
-        physics: const BouncingScrollPhysics(),
-        padding: const EdgeInsets.only(right: 27),
-        scrollDirection: Axis.horizontal,
-        itemCount: 10,
-        itemBuilder: (context, index) => const SingleServiceWidget(
-          imageHeight: 180,
-        ),
-      ),
-    );
-  }
-}
-
-class SingleServiceWidget extends StatelessWidget {
-  const SingleServiceWidget({
-    this.width,
-    this.serviceFontSize = 14,
-    this.imageHeight,
-    Key? key,
-  }) : super(key: key);
-  final double? width;
-  final double serviceFontSize;
-  final double? imageHeight;
-
-  @override
-  Widget build(BuildContext context) {
-    return SizedBox(
-      width: width,
-      child: Card(
-        elevation: 0,
-        color: Colors.white,
-        child: Stack(
-          alignment: Alignment.topLeft,
-          children: [
-            Padding(
-              padding: const EdgeInsets.all(8),
-              child: Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                mainAxisAlignment: MainAxisAlignment.spaceAround,
-                children: [
-                  Container(
-                    clipBehavior: Clip.antiAlias,
-                    height: imageHeight,
-                    width: width,
-                    decoration:
-                        BoxDecoration(borderRadius: BorderRadius.circular(8)),
-                    child: Image.asset(
-                      ImagePath.serviceImage,
-                      fit: BoxFit.fill,
-                    ),
+    return BlocBuilder<LatestServiceCubit, LatestServiceAddedInitialState>(
+      builder: (context, state) {
+        List<ServiceModel> servicesChanged = [];
+        if (state is LatestServiceAddedLoadingState) {
+          return SkeletonItem(
+              child: Container(
+            margin: const EdgeInsets.symmetric(horizontal: 20),
+            decoration: BoxDecoration(
+                color: Colors.white, borderRadius: BorderRadius.circular(8)),
+            height: 200,
+            width: 250,
+          ));
+        } else if (state is LatestServiceAddedSuccessState) {
+          if (changeTheOrder) {
+            servicesChanged.addAll(state.services);
+            servicesChanged.shuffle();
+          }
+          return SizedBox(
+            height: 250,
+            child: ListView.builder(
+              physics: const BouncingScrollPhysics(),
+              padding: const EdgeInsets.only(right: 27),
+              scrollDirection: Axis.horizontal,
+              itemCount: state.services.length,
+              itemBuilder: (context, index) => SingleServiceWidget(
+                imageHeight: 180,
+                image: changeTheOrder
+                    ? servicesChanged[index].image
+                    : state.services[index].image,
+                price: changeTheOrder
+                    ? '${servicesChanged[index].priceFrom}-${servicesChanged[index].priceTo}'
+                    : '${state.services[index].priceFrom}-${state.services[index].priceTo}',
+                serviceName: changeTheOrder
+                    ? servicesChanged[index].name
+                    : state.services[index].name,
+                loadingPlaceholder: Container(
+                  height: 200,
+                  width: 300,
+                  padding: const EdgeInsets.all(10),
+                  decoration: BoxDecoration(
+                    color: Colors.grey,
+                    borderRadius: BorderRadius.circular(8),
                   ),
-                  Text(
-                    'تنضيف داخلي: كنب وسجاد',
-                    textAlign: TextAlign.right,
-                    style: StyleManger.headline1(fontSize: serviceFontSize),
-                    overflow: TextOverflow.ellipsis,
-                  ),
-                  Text(
-                    '30 - 50 ش',
-                    textAlign: TextAlign.right,
-                  )
-                ],
+                ),
               ),
             ),
-            const Padding(
-              padding: EdgeInsets.only(
-                top: 18,
-                left: 16,
-              ),
-              child: StareRatingWidget(ratingNumber: '4.6'),
-            )
-          ],
-        ),
-      ),
+          );
+        }
+        return const Icon(
+          Icons.error,
+          size: 30,
+        );
+      },
     );
   }
 }
