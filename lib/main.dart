@@ -6,6 +6,7 @@ import 'package:handy_home_app/app/locator.dart';
 import 'package:handy_home_app/bussiness%20logic/bnbManager/bnb_manager_cubit.dart';
 
 import 'app/app.dart';
+import 'bussiness logic/searchCubit/search_cubit.dart';
 import 'data/network/local/local_network.dart';
 
 void main() async {
@@ -23,9 +24,15 @@ void main() async {
       path: 'assets/l10n',
       fallbackLocale: const Locale('ar'),
       child: MultiBlocProvider(
+          
         providers: [
           BlocProvider(
             create: (context) => BnbManagerCubit(),
+          
+          ),
+            BlocProvider(
+           create: (context) => SearchCubit(),
+          
           )
         ],
         child: MyApp(),

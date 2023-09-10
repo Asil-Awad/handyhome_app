@@ -1,6 +1,11 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:handy_home_app/bussiness%20logic/searchCubit/search_cubit.dart';
 import 'package:handy_home_app/presentation/view/home/HomeComponents/home_horizontal_category_widget.dart';
 
+import '../../../app/routes/navigation_manager.dart';
+import '../../../app/routes/route_constants.dart';
+import '../../../bussiness logic/searchCubit/search_state.dart';
 import '../../../customwidget/search_custom_widget.dart';
 import '../../resources/style_manager.dart';
 
@@ -25,7 +30,10 @@ class SearchScreen extends StatelessWidget {
                 const SizedBox(
                   height: 16,
                 ),
-                const SearchCustomWidget(),
+                SearchCustomWidget(onTap:()=>
+                
+                Navigator.pushNamed(context, RouteConstants.searchResultScreen)
+                  ),
               ],
             ),
           ),

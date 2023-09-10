@@ -1,9 +1,11 @@
 import 'package:flutter/material.dart';
-
 import '../presentation/resources/style_manager.dart';
+
 class SearchCustomWidget extends StatelessWidget {
-  const SearchCustomWidget({
+   final void Function()? onTap;
+   SearchCustomWidget({
     Key? key,
+ this.onTap,
   }) : super(key: key);
 
   @override
@@ -26,6 +28,8 @@ class SearchCustomWidget extends StatelessWidget {
             borderRadius: BorderRadius.circular(10),
             borderSide: BorderSide.none,
           )),
+
+          onTap: onTap,
     );
   }
 }

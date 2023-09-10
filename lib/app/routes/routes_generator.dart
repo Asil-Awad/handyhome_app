@@ -14,6 +14,7 @@ import 'package:handy_home_app/presentation/view/home/service_info_screen.dart';
 import 'package:handy_home_app/presentation/view/profile/addresses_management.dart';
 import 'package:handy_home_app/presentation/view/profile/become_service_provider_application_screen.dart';
 import 'package:handy_home_app/presentation/view/profile/become_service_provider_info_screen.dart';
+import 'package:handy_home_app/presentation/view/search/result_search.dart';
 import '../../bussiness logic/onboardingManager/on_boarding_cubit.dart';
 import '../../presentation/view/authentication/newpassword_view.dart';
 import '../../presentation/view/authentication/restorepassword_view.dart';
@@ -85,7 +86,9 @@ class RouteGenerator {
         return MaterialPageRoute(
             builder: (_) => BlocProvider<AuthCubit>(
                   create: (context) => AuthCubit(),
-                  child:  EmailOtpScreen(email: settings.arguments as String,),
+                  child: EmailOtpScreen(
+                    email: settings.arguments as String,
+                  ),
                 ));
 
       case RouteConstants.becomeServiceProviderInfoScreen:
@@ -98,6 +101,9 @@ class RouteGenerator {
       case RouteConstants.addressesManagementScreen:
         return MaterialPageRoute(
             builder: (_) => const AddressesManagementScreen());
+
+      case RouteConstants.searchResultScreen:
+        return MaterialPageRoute(builder: (_) =>  SearchResult(searchResults: [],));
       default:
         return unDefineRoute();
     }

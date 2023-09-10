@@ -43,6 +43,7 @@ dependencies:
   pinput: ^2.2.31
   skeletons: ^0.0.3
   smooth_page_indicator: ^1.1.0
+  provider: ^6.0.5
 
 dev_dependencies:
   flutter_lints: ^1.0.0

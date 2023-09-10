@@ -21,7 +21,7 @@ class CategoryScreen extends StatelessWidget {
             const SizedBox(
               height: 16,
             ),
-            const SearchCustomWidget(),
+  SearchCustomWidget(),
             Expanded(
               child: ListView.builder(
                 physics: const BouncingScrollPhysics(),
